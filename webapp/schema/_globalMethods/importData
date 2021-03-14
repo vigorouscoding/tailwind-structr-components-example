@@ -1,0 +1,43 @@
+{
+    let dataFile = $.first($.find('File', 'name', 'top-rated-movies-01.json'));
+
+    if (!$.empty(dataFile)) {
+
+        let json = $.get_content(dataFile);
+
+        let data = JSON.parse(json);
+
+        for (let movie of data) {
+
+            let genres = movie.genres.map((g) => {
+                return $.getOrCreate('Genre', {
+                    name: g,
+                    visibleToPublicUsers: true,
+                    visibleToAuthenticatedUsers: true
+                });
+            });
+
+            let actors = movie.actors.map((a) => {
+                return $.getOrCreate('Actor', {
+                    name: a,
+                    visibleToPublicUsers: true,
+                    visibleToAuthenticatedUsers: true
+                });
+            });
+
+            let movieData = {
+                name: $.empty(movie.originalTitle) ? movie.title : movie.originalTitle,
+                releaseDate: movie.releaseDate,
+                imdbRating: movie.imdbRating,
+                posterUrl: movie.posterurl,
+                storyline: movie.storyline,
+                genres: genres,
+                actors: actors,
+                visibleToPublicUsers: true,
+                visibleToAuthenticatedUsers: true
+            };
+
+            $.create('Movie', movieData);
+        }
+    }
+}

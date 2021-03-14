@@ -1,0 +1,13 @@
+${
+	is(
+		or(
+			eq(size(find('Actor')), 0),
+			eq(size(find('Movie')), 0),
+			eq(size(find('Genre')), 0)
+		),
+		(
+			store('missing-data', true),
+			'<p><b>Missing data</b>... did you run the global schema method for import?</p>'
+		)
+	)
+}
